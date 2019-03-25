@@ -78,7 +78,7 @@ void main() {
         AuthenticationUnauthenticated(),
       ];
 
-      when(mockFirebaseAuthService.signInWithGoogle()).thenAnswer((_) => null);
+      when(mockFirebaseAuthService.signIn()).thenAnswer((_) => null);
 
       expectLater(
         authenticationBloc.state,
@@ -95,7 +95,7 @@ void main() {
         AuthenticationAuthenticated(user: mockFirebaseUser),
       ];
 
-      when(mockFirebaseAuthService.signInWithGoogle())
+      when(mockFirebaseAuthService.signIn())
           .thenAnswer((_) => Future<MockFirebaseUser>.value(mockFirebaseUser));
 
       expectLater(

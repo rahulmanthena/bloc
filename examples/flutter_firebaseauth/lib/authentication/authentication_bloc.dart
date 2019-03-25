@@ -28,7 +28,7 @@ class AuthenticationBloc
     if (event is Login) {
       try {
         yield AuthenticationLoading();
-        final user = await this.firebaseAuthService.signInWithGoogle();
+        final user = await this.firebaseAuthService.signIn();
 
         if (user == null) {
           yield AuthenticationUnauthenticated();
@@ -44,7 +44,7 @@ class AuthenticationBloc
     if (event is Logout) {
       yield AuthenticationLoading();
       //logout user
-      await this.firebaseAuthService.signOutFromGoogle();
+      await this.firebaseAuthService.signOut();
       yield AuthenticationUnauthenticated();
     }
   }
