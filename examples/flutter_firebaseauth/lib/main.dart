@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_firebaseauth/authentication/authentication.dart';
+import 'package:flutter_firebaseauth/authentication/authentication_repository.dart';
 import 'package:flutter_firebaseauth/authentication/authentication_service.dart';
 import 'package:flutter_firebaseauth/home_page.dart';
 import 'package:flutter_firebaseauth/login_page.dart';
+import 'package:flutter_firebaseauth/todos/todos.dart';
+import 'package:flutter_firebaseauth/todos/todos_repository.dart';
+import 'package:flutter_firebaseauth/todos/todos_service.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -31,14 +35,22 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   AuthenticationBloc _authenticationBloc;
+  TodosBloc _todosBloc;
+  TodosService _todosService;
   FirebaseAuthService _firebaseAuthService;
+  UserRepository _userRepository;
+  TodosRepository _todosRepository;
 
   @override
   void initState() {
     super.initState();
-    _firebaseAuthService = FirebaseAuthService();
+    _userRepository = UserRepository();
+    _todosRepository = TodosRepository();
+    _firebaseAuthService = FirebaseAuthService(_userRepository);
+    _todosService = TodosService(_todosRepository);
     _authenticationBloc =
         AuthenticationBloc(firebaseAuthService: _firebaseAuthService);
+    _todosBloc = TodosBloc(todosService:_todosService);
     _authenticationBloc.dispatch(AppStarted());
   }
 
@@ -54,6 +66,9 @@ class _AppState extends State<App> {
       blocProviders: [
         BlocProvider<AuthenticationBloc>(
           bloc: _authenticationBloc,
+        ),
+        BlocProvider<TodosBloc>(
+          bloc: _todosBloc,
         ),
       ],
       child: MaterialApp(
